@@ -1,22 +1,22 @@
-versi: '3.8'
+version: '3.8'
 
-jasa:
-  sayap:
-    gambar: ghcr.io/pterodactyl/wings:v1.6.1
-    mulai ulang: selalu
-    jaringan:
-      - sayap0
-    port:
+services:
+  wings:
+    image: ghcr.io/pterodactyl/wings:v1.6.1
+    restart: always
+    networks:
+      - wings0
+    ports:
       - "8080:8080"
       - "2022:2022"
       - "443:443"
-    tty: benar
-    lingkungan:
+    tty: true
+    environment:
       TZ: "UTC"
-      SAYAP_UID: 988
+      WINGS_UID: 988
       WINGS_GID: 988
-      WINGS_USERNAME: pterodaktil
-    volume:
+      WINGS_USERNAME: pterodactyl
+    volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/var/lib/docker/containers/:/var/lib/docker/containers/"
       - "/etc/pterodactyl/:/etc/pterodactyl/"
@@ -24,16 +24,16 @@ jasa:
       - "/var/log/pterodactyl/:/var/log/pterodactyl/"
       - "/tmp/pterodactyl/:/tmp/pterodactyl/"
       - "/etc/ssl/certs:/etc/ssl/certs:ro"
-      # Anda mungkin memerlukan /srv/daemon-data jika Anda mengupgrade dari daemon lama
+      # you may need /srv/daemon-data if you are upgrading from an old daemon
       #- "/srv/daemon-data/:/srv/daemon-data/"
-      # Diperlukan untuk SSL jika Anda menggunakan mari enkripsi. batalkan komentar untuk digunakan.
+      # Required for ssl if you use let's encrypt. uncomment to use.
       #- "/etc/letsencrypt/:/etc/letsencrypt/"
-jaringan:
-  sayap0:
-    nama: sayap0
-    pengemudi: jembatan
-    ayah:
-      konfigurasi:
+networks:
+  wings0:
+    name: wings0
+    driver: bridge
+    ipam:
+      config:
         - subnet: "172.21.0.0/16"
-    pengemudi_opts:
-      com.docker.network.bridge.nama: wing0
+    driver_opts:
+      com.docker.network.bridge.name: wings0
